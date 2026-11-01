@@ -49,13 +49,25 @@ src/platform/** 存档 / 音效 / 埋点 / 广告接口
 
 ```bash
 npm install
-npm run dev        # 本地开发
-npm run build      # 产出 dist/（静态站，hash 指纹）
-npm run preview    # 预览产物
-npm test           # 全部验收用例
-npm run sim        # 批量模拟（60 局，六项指标）
+npm run dev         # 本地开发（http://localhost:5173）
+npm run build       # 产出 dist/（线上静态站：多文件 + hash 指纹，用于 CDN）
+npm run build:offline # 产出 dist-offline/index.html（单文件，双击即可离线游玩）
+npm run preview     # 通过本地 HTTP 服务预览 dist/
+npm test            # 全部验收用例
+npm run sim         # 批量模拟（60 局，六项指标）
 npm run impl-status # 重新生成 docs/impl-status.md
 ```
+
+### 三种打开方式，别选错
+
+| 文件 | 打开方式 | 说明 |
+| --- | --- | --- |
+| `index.html`（仓库根目录） | ❌ 不能直接双击 | 这是 Vite 的源码入口，引用 `/src/main.tsx`，必须走 `npm run dev` |
+| `dist/index.html` | ❌ 不能直接双击 | 线上多文件产物，`<script type="module" src>` 会被 `file://` 的 CORS 策略拦截，页面空白；用 `npm run preview` 或部署到静态托管 |
+| `dist-offline/index.html` | ✅ 双击即可 | 单文件产物，JS / CSS 全部内联，不依赖任何网络请求（对应需求 10.4「双击即玩」） |
+
+> 排查经验：双击打开页面全白时，先看控制台是否报
+> `Access to script at 'file:///...' from origin 'null' has been blocked by CORS policy` —— 那就是外部 module 脚本被拦截，改用单文件产物或本地 HTTP 服务。
 
 调试入口：
 
