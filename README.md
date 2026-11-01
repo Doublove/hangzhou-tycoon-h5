@@ -80,6 +80,18 @@ src/
 └── sim/run.ts   批量模拟与指标报告
 ```
 
+## 代码仓库与同步
+
+- GitHub：<https://github.com/Doublove/hangzhou-tycoon-h5>
+- 若 `git push` 因网络（github.com:443 被阻断）失败，改用 API 同步脚本：
+
+```bash
+python tools/gh-upload.py                      # 默认 Doublove/hangzhou-tycoon-h5
+GH_REPO=other-repo python tools/gh-upload.py   # 指定仓库
+```
+
+脚本走 Git Data API（建树 → 建提交 → 更新引用），凭据取自本机 Git Credential Manager，不打印令牌。
+
 ## 部署（A 路径：境外首发）
 
 按 13.2 的顺序执行，**前一步不完成则后一步无法启动**：
